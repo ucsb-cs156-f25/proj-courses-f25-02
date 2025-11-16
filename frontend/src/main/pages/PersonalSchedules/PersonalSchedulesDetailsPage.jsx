@@ -6,6 +6,9 @@ import PersonalSectionsTable from "main/components/PersonalSections/PersonalSect
 import { useBackend } from "main/utils/useBackend";
 import { Button, Row, Col } from "react-bootstrap";
 import { useCurrentUser } from "main/utils/currentUser";
+import PersonalSchedulePanel from "main/components/PersonalSchedules/PersonalSchedulePanel";
+import { transformToEvents } from "main/utils/dateUtils";
+
 
 export default function PersonalSchedulesDetailsPage() {
   let { id } = useParams();
@@ -53,34 +56,29 @@ export default function PersonalSchedulesDetailsPage() {
     );
   };
 
-  const weeklyViewButton = () => {
-    return (
-      <Button
-        variant="primary"
-        onClick={() => navigate(`/personalschedules/weekly/${id}`)}
-      >
-        View Weekly Schedule
-      </Button>
-    );
-  };
 
   return (
     <BasicLayout>
       <div className="pt-2">
         <h1>Personal Schedules Details</h1>
+
         {personalSchedule && (
           <PersonalSchedulesTable
             personalSchedules={[personalSchedule]}
             showButtons={false}
           />
         )}
+
         <div className="mt-4">
+
+          {/* Sections Header */}
           <Row className="align-items-center mb-3">
             <Col>
               <h2>Sections in Personal Schedule</h2>
             </Col>
-            <Col xs="auto">{weeklyViewButton()}</Col>
           </Row>
+
+          {/* Sections Table */}
           {personalSection && (
             <PersonalSectionsTable
               personalSections={personalSection}
@@ -88,9 +86,28 @@ export default function PersonalSchedulesDetailsPage() {
               currentUser={currentUser}
             />
           )}
+
+          {/* Weekly Schedule */}
+          {personalSection && (
+            <>
+              <Row className="align-items-center mb-3 mt-5">
+                <Col>
+                  <h2>Weekly Schedule</h2>
+                </Col>
+              </Row>
+
+              <div className="mt-4">
+                <PersonalSchedulePanel
+                  Events={transformToEvents(personalSection)}
+                />
+              </div>
+            </>
+          )}
         </div>
+
         {backButton()}
       </div>
     </BasicLayout>
   );
 }
+

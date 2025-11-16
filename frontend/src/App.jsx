@@ -85,11 +85,6 @@ function App() {
               path="/personalschedules/details/:id"
               element={<PersonalSchedulesDetailsPage />}
             />
-            <Route
-              exact
-              path="/personalschedules/weekly/:id"
-              element={<PersonalSchedulesWeeklyViewPage />}
-            />
           </>
         )}
         <Route
