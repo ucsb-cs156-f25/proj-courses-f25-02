@@ -9,7 +9,6 @@ import { useCurrentUser } from "main/utils/currentUser";
 import PersonalSchedulePanel from "main/components/PersonalSchedules/PersonalSchedulePanel";
 import { transformToEvents } from "main/utils/dateUtils";
 
-
 export default function PersonalSchedulesDetailsPage() {
   let { id } = useParams();
   const navigate = useNavigate();
@@ -56,7 +55,6 @@ export default function PersonalSchedulesDetailsPage() {
     );
   };
 
-
   return (
     <BasicLayout>
       <div className="pt-2">
@@ -70,7 +68,6 @@ export default function PersonalSchedulesDetailsPage() {
         )}
 
         <div className="mt-4">
-
           {/* Sections Header */}
           <Row className="align-items-center mb-3">
             <Col>
@@ -110,4 +107,3 @@ export default function PersonalSchedulesDetailsPage() {
     </BasicLayout>
   );
 }
-
