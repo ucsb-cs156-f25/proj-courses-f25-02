@@ -12,10 +12,8 @@ export default function ProtectedPage({ component, currentUser, enforceRole }) {
   if (hasRole(currentUser, enforceRole)) {
     return <>{component}</>;
   } else if (!currentUser.loggedIn) {
-    // Not logged in - prompt to sign in
     return <PromptSignInPage />;
   } else {
-    // Logged in but insufficient permissions
     return <AccessDeniedPage />;
   }
 }
