@@ -8,9 +8,13 @@ import AdminJobsPage from "main/pages/Admin/AdminJobsPage";
 import AdminJobLogPage from "main/pages/Admin/AdminJobLogPage";
 import DeveloperPage from "main/pages/DeveloperPage"; // route from /developer to DeveloperPage
 
-import { hasRole, useCurrentUser } from "main/utils/currentUser";
+import { useCurrentUser } from "main/utils/currentUser";
 
 import "bootstrap/dist/css/bootstrap.css";
+
+import ProtectedPage from "main/pages/Auth/ProtectedPage";
+import NotFoundPage from "main/pages/Auth/NotFoundPage";
+import SignInSuccessPage from "main/pages/Auth/SignInSuccessPage";
 
 import PersonalSchedulesIndexPage from "main/pages/PersonalSchedules/PersonalSchedulesIndexPage";
 import PersonalSchedulesCreatePage from "main/pages/PersonalSchedules/PersonalSchedulesCreatePage";
@@ -28,97 +32,170 @@ import GeneralEducationSearchPage from "main/pages/GeneralEducation/Search/Gener
 import CourseDetailsIndexPage from "main/pages/CourseDetails/CourseDetailsIndexPage";
 
 function App() {
-  const { data: currentUser } = useCurrentUser();
+  const currentUser = useCurrentUser();
+
+  const homePage = currentUser.loggedIn ? (
+    <SectionSearchesIndexPageLoggedIn />
+  ) : (
+    <SectionSearchesIndexPageNotLoggedIn />
+  );
 
   return (
     <BrowserRouter>
       <Routes>
-        {hasRole(currentUser, "ROLE_USER") && (
-          <Route
-            exact
-            path="/"
-            element={<SectionSearchesIndexPageLoggedIn />}
-          />
-        )}
-        {!hasRole(currentUser, "ROLE_USER") && (
-          <Route
-            exact
-            path="/"
-            element={<SectionSearchesIndexPageNotLoggedIn />}
-          />
-        )}
-
-        <Route exact path="/profile" element={<ProfilePage />} />
-        {hasRole(currentUser, "ROLE_ADMIN") && (
-          <>
-            <Route exact path="/admin/users" element={<AdminUsersPage />} />
-            <Route exact path="/admin/updates" element={<AdminUpdatesPage />} />
-            <Route
-              exact
-              path="/admin/loadsubjects"
-              element={<AdminLoadSubjectsPage />}
-            />
-            <Route path="/admin/jobs" element={<AdminJobsPage />} />
-            <Route path="/admin/jobs/logs/:id" element={<AdminJobLogPage />} />
-            <Route path="/developer" element={<DeveloperPage />} />
-          </>
-        )}
-        {hasRole(currentUser, "ROLE_USER") && (
-          <>
-            <Route
-              exact
-              path="/personalschedules/list"
-              element={<PersonalSchedulesIndexPage />}
-            />
-            <Route
-              exact
-              path="/personalschedules/create"
-              element={<PersonalSchedulesCreatePage />}
-            />
-            <Route
-              exact
-              path="/personalschedules/edit/:id"
-              element={<PersonalSchedulesEditPage />}
-            />
-            <Route
-              exact
-              path="/personalschedules/details/:id"
-              element={<PersonalSchedulesDetailsPage />}
-            />
-            <Route
-              exact
-              path="/personalschedules/weekly/:id"
-              element={<PersonalSchedulesWeeklyViewPage />}
-            />
-          </>
-        )}
+        <Route path="*" element={<NotFoundPage />} />
+        <Route path="/" element={homePage} />
         <Route
-          exact
+          path="/profile"
+          element={
+            <ProtectedPage
+              component={<ProfilePage />}
+              enforceRole={"ROLE_USER"}
+              currentUser={currentUser}
+            />
+          }
+        />
+        <Route
+          path="/login/success"
+          element={
+            <ProtectedPage
+              component={<SignInSuccessPage />}
+              enforceRole={"ROLE_USER"}
+              currentUser={currentUser}
+            />
+          }
+        />
+        <Route
+          path="/admin/users"
+          element={
+            <ProtectedPage
+              component={<AdminUsersPage />}
+              enforceRole={"ROLE_ADMIN"}
+              currentUser={currentUser}
+            />
+          }
+        />
+        <Route
+          path="/admin/updates"
+          element={
+            <ProtectedPage
+              component={<AdminUpdatesPage />}
+              enforceRole={"ROLE_ADMIN"}
+              currentUser={currentUser}
+            />
+          }
+        />
+        <Route
+          path="/admin/loadsubjects"
+          element={
+            <ProtectedPage
+              component={<AdminLoadSubjectsPage />}
+              enforceRole={"ROLE_ADMIN"}
+              currentUser={currentUser}
+            />
+          }
+        />
+        <Route
+          path="/admin/jobs"
+          element={
+            <ProtectedPage
+              component={<AdminJobsPage />}
+              enforceRole={"ROLE_ADMIN"}
+              currentUser={currentUser}
+            />
+          }
+        />
+        <Route
+          path="/admin/jobs/logs/:id"
+          element={
+            <ProtectedPage
+              component={<AdminJobLogPage />}
+              enforceRole={"ROLE_ADMIN"}
+              currentUser={currentUser}
+            />
+          }
+        />
+        <Route
+          path="/developer"
+          element={
+            <ProtectedPage
+              component={<DeveloperPage />}
+              enforceRole={"ROLE_ADMIN"}
+              currentUser={currentUser}
+            />
+          }
+        />
+        <Route
+          path="/personalschedules/list"
+          element={
+            <ProtectedPage
+              component={<PersonalSchedulesIndexPage />}
+              enforceRole={"ROLE_USER"}
+              currentUser={currentUser}
+            />
+          }
+        />
+        <Route
+          path="/personalschedules/create"
+          element={
+            <ProtectedPage
+              component={<PersonalSchedulesCreatePage />}
+              enforceRole={"ROLE_USER"}
+              currentUser={currentUser}
+            />
+          }
+        />
+        <Route
+          path="/personalschedules/edit/:id"
+          element={
+            <ProtectedPage
+              component={<PersonalSchedulesEditPage />}
+              enforceRole={"ROLE_USER"}
+              currentUser={currentUser}
+            />
+          }
+        />
+        <Route
+          path="/personalschedules/details/:id"
+          element={
+            <ProtectedPage
+              component={<PersonalSchedulesDetailsPage />}
+              enforceRole={"ROLE_USER"}
+              currentUser={currentUser}
+            />
+          }
+        />
+        <Route
+          path="/personalschedules/weekly/:id"
+          element={
+            <ProtectedPage
+              component={<PersonalSchedulesWeeklyViewPage />}
+              enforceRole={"ROLE_USER"}
+              currentUser={currentUser}
+            />
+          }
+        />
+        <Route
           path="/coursedescriptions/search"
           element={<CourseDescriptionIndexPage />}
         />
         <Route
-          exact
           path="/courseovertime/search"
           element={<CourseOverTimeIndexPage />}
         />
         <Route
-          exact
           path="/courseovertime/buildingsearch/classrooms"
           element={<CourseOverTimeBuildingsIndexPage />}
         />
         <Route
-          exact
           path="/courseovertime/instructorsearch"
           element={<CourseOverTimeInstructorIndexPage />}
         />
         <Route
-          exact
           path="/coursedetails/:qtr/:enrollCode"
           element={<CourseDetailsIndexPage />}
         />
         <Route
-          exact
           path="/generaleducation/search"
           element={<GeneralEducationSearchPage />}
         />
