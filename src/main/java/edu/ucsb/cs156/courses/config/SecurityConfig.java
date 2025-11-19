@@ -57,8 +57,10 @@ public class SecurityConfig {
         .headers((headers) -> headers.frameOptions((frame) -> frame.sameOrigin())) // for h2-console
         .oauth2Login(
             oauth2 ->
-                oauth2.userInfoEndpoint(
-                    userInfo -> userInfo.userAuthoritiesMapper(this.userAuthoritiesMapper())))
+                oauth2
+                    .defaultSuccessUrl("/login/success")
+                    .userInfoEndpoint(
+                        userInfo -> userInfo.userAuthoritiesMapper(this.userAuthoritiesMapper())))
         .csrf(
             csrf ->
                 csrf.ignoringRequestMatchers(new AntPathRequestMatcher("/h2-console/**"))
