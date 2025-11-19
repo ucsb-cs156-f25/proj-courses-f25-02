@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from "react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "react-toastify";
 
@@ -62,14 +62,15 @@ export function useBackendMutation(
 ) {
   const queryClient = useQueryClient();
 
-  return useMutation((object) => wrappedParams(objectToAxiosParams(object)), {
+  return useMutation({
+    mutationFn: (object) => wrappedParams(objectToAxiosParams(object)),
     onError: (error) => {
       const errorMessage = `useBackendMutation: Error communicating with backend via ${error.response.config.method} on ${error.response.config.url}`;
       toast(errorMessage, { type: "error" });
     },
     // Stryker disable all : Not sure how to set up the complex behavior needed to test this
     onSettled: () => {
-      if (queryKey !== null) queryClient.invalidateQueries(queryKey);
+      if (queryKey !== null) queryClient.invalidateQueries({ queryKey });
     },
     // Stryker restore all
     retry: false,

@@ -23,7 +23,7 @@
     "react-fontawesome": "^1.7.1",
     "react-hook-form": "^7.53.0",
     "react-inspector": "^6.0.2",
-    "react-query": "^3.39.3",
+    "@tanstack/react-query": "^5.85.4",
     "react-router-dom": "^6.26.1",
     "react-toastify": "^10.0.5",
     "react18-json-view": "^0.2.8",

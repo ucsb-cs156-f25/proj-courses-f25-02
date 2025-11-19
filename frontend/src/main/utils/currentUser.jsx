@@ -1,56 +1,50 @@
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 export function useCurrentUser() {
-  return useQuery(
-    "current user",
-    async () => {
+  let rolesList = ["ERROR_GETTING_ROLES"];
+  const queryResults = useQuery({
+    queryKey: ["current user"],
+    queryFn: async () => {
       try {
         const response = await axios.get("/api/currentUser");
-        const rolesList = response.data.roles.map((r) => r.authority);
+        try {
+          rolesList = response.data.roles.map((r) => r.authority);
+        } catch (e) {
+          console.error("Error getting roles: ", e);
+        }
         response.data = { ...response.data, rolesList: rolesList };
-        const returnValue = { loggedIn: true, root: response.data };
-        return returnValue;
+        return { loggedIn: true, root: response.data };
       } catch (e) {
-        console.error("Error invoking axios.get: ", e);
-        return { loggedIn: false, root: null, initialData: true };
+        if (e.response?.status === 403) {
+          return { loggedIn: false, root: {} };
+        } else {
+          console.error("Error invoking axios.get: ", e);
+          throw e;
+        }
       }
     },
-    {
-      initialData: { loggedIn: false, root: null, initialData: true },
-    },
-  );
+    initialData: { loggedIn: false, root: null, initialData: true },
+  });
+  return queryResults.data;
 }
 
 export function useLogout() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const mutation = useMutation(async () => {
-    await axios.post("/logout");
-    await queryClient.resetQueries("current user", { exact: true });
-    navigate("/");
+  const mutation = useMutation({
+    mutationFn: async () => {
+      await axios.post("/logout");
+      await queryClient.resetQueries({ queryKey: ["current user"] });
+      navigate("/");
+    },
   });
   return mutation;
 }
 
 export function hasRole(currentUser, role) {
-  // The following hack is because there is some bug in terms of the
-  // shape of the data returned by useCurrentUser.  Is there a separate
-  // data level, or not?
-
-  // We will file an issue to track that down and then remove this hack
-
   if (currentUser == null) return false;
-
-  if (
-    "data" in currentUser &&
-    "root" in currentUser.data &&
-    currentUser.data.root != null &&
-    "rolesList" in currentUser.data.root
-  ) {
-    return currentUser.data.root.rolesList.includes(role);
-  }
 
   return currentUser.root?.rolesList?.includes(role);
 }
