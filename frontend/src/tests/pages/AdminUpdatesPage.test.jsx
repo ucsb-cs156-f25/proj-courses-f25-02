@@ -1,7 +1,7 @@
 import { vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import AdminUpdatesPage from "main/pages/Admin/AdminUpdatesPage.jsx";
-import { QueryClient, QueryClientProvider } from "react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { MemoryRouter } from "react-router-dom";
 import * as useLocalStorage from "main/utils/useLocalStorage";
 

@@ -5,7 +5,7 @@ import {
   twoQuarterCourse,
   fullCourse,
 } from "fixtures/gradeHistoryFixtures";
-import { QueryClient, QueryClientProvider } from "react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { MemoryRouter } from "react-router-dom";
 import GradeHistoryGraph from "main/components/GradeHistory/GradeHistoryGraph";
 import {

@@ -5,7 +5,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import PersonalScheduleForm from "main/components/PersonalSchedules/PersonalScheduleForm";
 import { personalSchedulesFixtures } from "fixtures/personalSchedulesFixtures";
 
-import { QueryClient, QueryClientProvider } from "react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import axios from "axios";
 import AxiosMockAdapter from "axios-mock-adapter";
