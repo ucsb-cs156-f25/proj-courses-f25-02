@@ -58,7 +58,7 @@ public class SecurityConfig {
         .oauth2Login(
             oauth2 ->
                 oauth2
-                    .defaultSuccessUrl("/login/success")
+                    .defaultSuccessUrl("/login/success", true)
                     .userInfoEndpoint(
                         userInfo -> userInfo.userAuthoritiesMapper(this.userAuthoritiesMapper())))
         .csrf(
