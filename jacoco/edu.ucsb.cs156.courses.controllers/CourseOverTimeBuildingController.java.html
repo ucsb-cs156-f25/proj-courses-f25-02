@@ -65,7 +65,7 @@ import org.springframework.web.bind.annotation.RestController;
 <span class="fc" id="L65">            convertedSectionCollection.findByQuarterRangeAndBuildingCode(</span>
                 startQtr, endQtr, buildingCode));
 
-<span class="fc bfc" id="L68" title="All 2 branches covered.">    if (!classroom.isEmpty()) {</span>
+<span class="fc bfc" id="L68" title="All 4 branches covered.">    if (!classroom.isEmpty() &amp;&amp; !classroom.equals(&quot;ALL&quot;)) {</span>
 <span class="fc" id="L69">      courseResults =</span>
 <span class="fc" id="L70">          courseResults.stream()</span>
 <span class="fc" id="L71">              .filter(</span>
